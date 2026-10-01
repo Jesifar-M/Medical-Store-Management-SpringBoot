@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Medicine</title>
+</head>
+
+<body>
+
+<h2>Edit Medicine</h2>
+
+<form th:action="@{/medicines/update/{id}(id=${medicine.id})}"
+      method="post">
+
+    <label>Medicine Name:</label>
+
+    <input type="text"
+           name="name"
+           th:value="${medicine.name}"
+           required>
+
+    <br><br>
+
+    <label>Available Stock:</label>
+
+    <input type="number"
+           name="stock"
+           th:value="${medicine.stock}"
+           min="0"
+           required>
+
+    <br><br>
+
+    <button type="submit">
+        Update
+    </button>
+
+</form>
+
+<br>
+
+<a href="/medicines">
+    Back to Medicine List
+</a>
+
+</body>
+</html>

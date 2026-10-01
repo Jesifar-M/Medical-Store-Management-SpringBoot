@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Medical Store Management</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f8fb;
+            color: #263238;
+        }
+
+        /* Header */
+
+        .header {
+            background: linear-gradient(135deg, #087f8c, #0aa6a6);
+            color: white;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            margin-top: 4px;
+            opacity: 0.9;
+        }
+
+        .logout {
+            text-decoration: none;
+            background: white;
+            color: #087f8c;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .logout:hover {
+            background: #e8ffff;
+        }
+
+        /* Main */
+
+        .container {
+            width: 86%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            font-size: 27px;
+            color: #173b4d;
+        }
+
+        .welcome p {
+            color: #78909c;
+            margin-top: 5px;
+        }
+
+        /* Cards */
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+        }
+
+        .card h3 {
+            color: #087f8c;
+            margin-bottom: 18px;
+        }
+
+        /* Form */
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .input-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #455a64;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d5e0e5;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #0aa6a6;
+            box-shadow: 0 0 0 2px rgba(10,166,166,0.1);
+        }
+
+        button {
+            border: none;
+            cursor: pointer;
+            background: #087f8c;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #066a75;
+        }
+
+        .add-button {
+            margin-top: 23px;
+        }
+
+        /* Error */
+
+        .error {
+            color: #d32f2f;
+            background: #ffebee;
+            padding: 10px;
+            border-radius: 7px;
+            margin-bottom: 15px;
+        }
+
+        /* Search */
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-box input {
+            flex: 1;
+        }
+
+        /* Table */
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #087f8c;
+            color: white;
+            padding: 14px;
+            text-align: left;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #edf2f4;
+        }
+
+        tr:hover {
+            background: #f5fbfc;
+        }
+
+        .stock {
+            font-weight: bold;
+            color: #087f8c;
+        }
+
+        /* Action buttons */
+
+        .edit {
+            text-decoration: none;
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 7px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .delete {
+            text-decoration: none;
+            background: #ffebee;
+            color: #d32f2f;
+            padding: 7px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* Pagination */
+
+        .pagination {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pagination a {
+            text-decoration: none;
+            padding: 9px 14px;
+            border-radius: 7px;
+            background: #e0f2f1;
+            color: #087f8c;
+            font-weight: bold;
+        }
+
+        .pagination a:hover {
+            background: #087f8c;
+            color: white;
+        }
+
+        .page-info {
+            color: #607d8b;
+            font-size: 14px;
+        }
+
+        /* Footer */
+
+        .footer {
+            text-align: center;
+            padding: 25px;
+            color: #90a4ae;
+            font-size: 13px;
+        }
+
+        /* Mobile */
+
+        @media (max-width: 700px) {
+
+            .header {
+                padding: 18px;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            .form-row {
+                flex-direction: column;
+            }
+
+            .add-button {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<div class="header">
+
+    <div>
+
+        <div class="logo">
+            💊 MediCare Store
+        </div>
+
+        <div class="subtitle">
+            Medical Store Management System
+        </div>
+
+    </div>
+
+    <a href="/logout" class="logout">
+        Logout
+    </a>
+
+</div>
+
+
+<!-- MAIN -->
+
+<div class="container">
+
+
+    <div class="welcome">
+
+        <h2>Medicine Dashboard</h2>
+
+        <p>
+            Manage medicines, stock and inventory easily.
+        </p>
+
+    </div>
+
+
+    <!-- ADD MEDICINE -->
+
+    <div class="card">
+
+        <h3>➕ Add Medicine</h3>
+
+        <p class="error"
+           th:if="${error}"
+           th:text="${error}">
+        </p>
+
+        <form action="/medicines/add"
+              method="post">
+
+            <div class="form-row">
+
+                <div class="input-group">
+
+                    <label>
+                        Medicine Name
+                    </label>
+
+                    <input type="text"
+                           name="name"
+                           placeholder="Enter medicine name"
+                           required>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label>
+                        Available Stock
+                    </label>
+
+                    <input type="number"
+                           name="stock"
+                           placeholder="Enter stock quantity"
+                           min="0"
+                           required>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <button type="submit"
+                            class="add-button">
+
+                        Add Medicine
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <div class="card">
+
+        <h3>🔍 Search Medicine</h3>
+
+        <form action="/medicines/search"
+              method="get">
+
+            <div class="search-box">
+
+                <input type="text"
+                       name="name"
+                       placeholder="Search medicine by name...">
+
+                <button type="submit">
+                    Search
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- MEDICINE LIST -->
+
+    <div class="card">
+
+        <h3>💊 Medicine Inventory</h3>
+
+        <div class="table-container">
+
+            <table>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Medicine Name</th>
+
+                    <th>Stock</th>
+
+                    <th>Added Time</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+
+                <tr th:each="medicine : ${medicines}">
+
+                    <td th:text="${medicine.id}">
+                    </td>
+
+                    <td th:text="${medicine.name}">
+                    </td>
+
+                    <td class="stock"
+                        th:text="${medicine.stock}">
+                    </td>
+
+                    <td th:text="${medicine.addedTime}">
+                    </td>
+
+                    <td>
+
+                        <a class="edit"
+                           th:href="@{/medicines/edit/{id}(id=${medicine.id})}">
+                            Edit
+                        </a>
+
+                        &nbsp;
+
+                        <a class="delete"
+                           th:href="@{/medicines/delete/{id}(id=${medicine.id})}">
+                            Delete
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </div>
+
+
+        <!-- PAGINATION -->
+
+        <div class="pagination"
+             th:if="${totalPages > 0}">
+
+            <a th:if="${currentPage > 0}"
+               th:href="@{/medicines(page=${currentPage - 1})}">
+                ← Previous
+            </a>
+
+
+            <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+
+                <a th:href="@{/medicines(page=${i})}"
+                   th:text="${i + 1}">
+                </a>
+
+            </span>
+
+
+            <a th:if="${currentPage < totalPages - 1}"
+               th:href="@{/medicines(page=${currentPage + 1})}">
+                Next →
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- FOOTER -->
+
+<div class="footer">
+
+    © 2026 MediCare Store · Medical Store Management System
+
+</div>
+
+</body>
+
+</html>
